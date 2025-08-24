@@ -1,0 +1,14 @@
+---
+- name: Install and Configure Elasticsearch
+  hosts: all
+  become: yes
+
+  pre_tasks:
+    - name: Skip Jenkins host
+      debug:
+        msg: " Skipping Jenkins host"
+      when: inventory_hostname == "jenkins"
+
+  roles:
+    - role: elasticsearch
+      when: inventory_hostname != "jenkins"

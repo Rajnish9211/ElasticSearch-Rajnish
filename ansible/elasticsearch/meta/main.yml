@@ -1,0 +1,14 @@
+galaxy_info:
+  role_name: elasticsearch
+  description: Install and configure Elasticsearch
+  company: ""
+  license: MIT
+  min_ansible_version: 2.9
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: CentOS
+      versions:
+        - all
+  galaxy_tags: [elasticsearch]
