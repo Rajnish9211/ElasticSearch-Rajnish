@@ -1,17 +1,55 @@
+# --------------------------
 # Terraform
-.terraform/
-.terraform.lock.hcl
+# --------------------------
+**/.terraform/*
 *.tfstate
 *.tfstate.*
 crash.log
-crash.*.log
+*.lock.hcl
 override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
-terraform.tfvars
+.terraformrc
+terraform.rc
 *.tfvars
-# Plan files
-*.plan
-# Provider plugins (sometimes outside .terraform)
-terraform.d/
+*.tfvars.json
+
+# --------------------------
+# Ansible
+# --------------------------
+# Local inventory or secrets
+*.retry
+*.vault_pass
+.vault_pass.txt
+vault_pass.txt
+
+# Ansible logs
+*.log
+
+# SSH keys (agar accidentally rakhe ho)
+*.pem
+*.key
+id_rsa*
+id_ecdsa*
+id_ed25519*
+
+# Python virtualenv (agar ansible venv me chalate ho)
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Molecule test directories (agar testing use karte ho)
+.molecule/
+
+# --------------------------
+# General IDE / OS stuff
+# --------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
