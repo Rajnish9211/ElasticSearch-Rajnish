@@ -34,12 +34,7 @@ module "amazonlinux_instance" {
   public_sg_id     = module.security.public_sg_id
   name             = "amazon"
 }
-
-# -------------------- S3 Backend --------------------
-module "s3_backend" {
-  source      = "./modules/backend-s3"
-  bucket_name = var.bucket_name
-}
+ 
 
 # -------------------- Outputs --------------------
 output "ubuntu_public_ip" {
