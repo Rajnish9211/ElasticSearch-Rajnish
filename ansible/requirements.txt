@@ -1,6 +1,5 @@
 ansible==9.4.0
 boto3
 botocore
-amazon.aws
 jinja2
 paramiko
