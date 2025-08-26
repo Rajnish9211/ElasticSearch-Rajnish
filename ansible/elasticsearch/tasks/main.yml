@@ -122,15 +122,6 @@
   when: ansible_distribution == "Amazon"
 
 # ------------------ KIBANA INSTALLATION (Common) ------------------
-- name: Install Kibana
-  package:
-    name: kibana
-    state: present
-  notify:
-    - Start Kibana
-    - Enable Kibana
-    - Restart Kibana
-
 - name: Configure kibana.yml
   block:
     - name: Set Kibana server.host
@@ -145,20 +136,21 @@
         regexp: '^#?elasticsearch.hosts:'
         line: 'elasticsearch.hosts: ["https://{{ ansible_host }}:9200"]'
 
-    - name: Set Elasticsearch username
+    - name: Set Elasticsearch service account token
       lineinfile:
         path: /etc/kibana/kibana.yml
-        regexp: '^#?elasticsearch.username:'
-        line: 'elasticsearch.username: "elastic"'
+        regexp: '^#?elasticsearch.serviceAccountToken:'
+        line: 'elasticsearch.serviceAccountToken: "{{ kibana_service_token }}"'
 
-    - name: Set Elasticsearch password
+    - name: Disable SSL verification for Elasticsearch
       lineinfile:
         path: /etc/kibana/kibana.yml
-        regexp: '^#?elasticsearch.password:'
-        line: 'elasticsearch.password: "{{ elastic_password }}"'
+        regexp: '^#?elasticsearch.ssl.verificationMode:'
+        line: 'elasticsearch.ssl.verificationMode: none'
 
-    - name: Disable Kibana SSL 
+    - name: Disable Kibana SSL
       lineinfile:
         path: /etc/kibana/kibana.yml
         regexp: '^#?server.ssl.enabled:'
         line: 'server.ssl.enabled: false'
+
