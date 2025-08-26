@@ -1,5 +1,7 @@
 #SPDX-License-Identifier: MIT-0
 ---
+
+# ------------------ UBUNTU/DEBIAN TASKS ------------------
 - name: Update apt repo and cache
   apt:
     update_cache: yes
@@ -13,7 +15,7 @@
     force_apt_get: yes
   when: ansible_os_family == "Debian"
 
-- name: Install necessary packages on Debian
+- name: Install necessary packages on Debian/Ubuntu
   apt:
     name:
       - nginx
@@ -23,21 +25,21 @@
     state: present
   when: ansible_os_family == "Debian"
 
-- name: Import the Elasticsearch PGP key on Debian
+- name: Import the Elasticsearch PGP key on Debian/Ubuntu
   apt_key:
     url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
     keyring: /usr/share/keyrings/elasticsearch-keyring.gpg
     state: present
   when: ansible_os_family == "Debian"
 
-- name: Add the Elasticsearch repository on Debian
+- name: Add the Elasticsearch repository on Debian/Ubuntu
   lineinfile:
     path: /etc/apt/sources.list.d/elastic-8.x.list
     line: "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main"
     create: yes
   when: ansible_os_family == "Debian"
 
-- name: Install Elasticsearch package on Debian
+- name: Install Elasticsearch package on Debian/Ubuntu
   apt:
     name: elasticsearch
     state: present
@@ -48,7 +50,7 @@
     - Restart Elasticsearch
   when: ansible_os_family == "Debian"
 
-- name: Configure elasticsearch.yml on Debian
+- name: Configure elasticsearch.yml on Debian/Ubuntu
   block:
     - name: Set network.host to 0.0.0.0
       lineinfile:
@@ -62,54 +64,6 @@
         regexp: '^#?http.port:'
         line: 'http.port: 9200'
   when: ansible_os_family == "Debian"
-
-# ------------------ REDHAT FAMILY TASKS ------------------
-- name: Install dependencies on RedHat
-  yum:
-    name:
-      - java-17-openjdk
-      - nginx
-      - wget
-      - vim
-    state: present
-  when: ansible_os_family == "RedHat" and ansible_distribution != "Amazon"
-
-- name: Import the Elasticsearch GPG key on RedHat
-  rpm_key:
-    key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
-    state: present
-  when: ansible_os_family == "RedHat" and ansible_distribution != "Amazon"
-
-- name: Add Elasticsearch repo on RedHat
-  get_url:
-    url: https://artifacts.elastic.co/packages/8.x/yum/elasticsearch.repo
-    dest: /etc/yum.repos.d/elasticsearch.repo
-  when: ansible_os_family == "RedHat" and ansible_distribution != "Amazon"
-
-- name: Install Elasticsearch on RedHat
-  yum:
-    name: elasticsearch
-    state: present
-  notify:
-    - Start Elasticsearch
-    - Enable Elasticsearch
-    - Restart Elasticsearch
-  when: ansible_os_family == "RedHat" and ansible_distribution != "Amazon"
-
-- name: Configure elasticsearch.yml on RedHat
-  block:
-    - name: Set network.host to 0.0.0.0
-      lineinfile:
-        path: /etc/elasticsearch/elasticsearch.yml
-        regexp: '^#?network.host:'
-        line: 'network.host: 0.0.0.0'
-
-    - name: Set http.port to 9200
-      lineinfile:
-        path: /etc/elasticsearch/elasticsearch.yml
-        regexp: '^#?http.port:'
-        line: 'http.port: 9200'
-  when: ansible_os_family == "RedHat" and ansible_distribution != "Amazon"
 
 # ------------------ AMAZON LINUX TASKS ------------------
 - name: Install dependencies on Amazon Linux
@@ -166,51 +120,3 @@
         regexp: '^#?http.port:'
         line: 'http.port: 9200'
   when: ansible_distribution == "Amazon"
-
-# ------------------ SUSE FAMILY TASKS ------------------
-- name: Install dependencies on SUSE
-  zypper:
-    name:
-      - java-17-openjdk
-      - nginx
-      - wget
-      - vim
-    state: present
-  when: ansible_os_family == "Suse"
-
-- name: Import Elasticsearch GPG key on SUSE
-  rpm_key:
-    key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
-    state: present
-  when: ansible_os_family == "Suse"
-
-- name: Add Elasticsearch repo on SUSE
-  get_url:
-    url: https://artifacts.elastic.co/packages/8.x/yum/elasticsearch.repo
-    dest: /etc/zypp/repos.d/elasticsearch.repo
-  when: ansible_os_family == "Suse"
-
-- name: Install Elasticsearch on SUSE
-  zypper:
-    name: elasticsearch
-    state: present
-  notify:
-    - Start Elasticsearch
-    - Enable Elasticsearch
-    - Restart Elasticsearch
-  when: ansible_os_family == "Suse"
-
-- name: Configure elasticsearch.yml on SUSE
-  block:
-    - name: Set network.host to 0.0.0.0
-      lineinfile:
-        path: /etc/elasticsearch/elasticsearch.yml
-        regexp: '^#?network.host:'
-        line: 'network.host: 0.0.0.0'
-
-    - name: Set http.port to 9200
-      lineinfile:
-        path: /etc/elasticsearch/elasticsearch.yml
-        regexp: '^#?http.port:'
-        line: 'http.port: 9200'
-  when: ansible_os_family == "Suse"
