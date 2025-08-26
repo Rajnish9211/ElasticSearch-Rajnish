@@ -1,4 +1,4 @@
-#SPDX-License-Identifier: MIT-0
+# handlers file for elasticsearch
 ---
 - name: Start Elasticsearch
   systemd:
@@ -14,5 +14,18 @@
   systemd:
     name: elasticsearch
     state: restarted
-    enabled: yes  
-# handlers file for elasticsearch
+
+- name: Start Kibana
+  systemd:
+    name: kibana
+    state: started
+
+- name: Enable Kibana
+  systemd:
+    name: kibana
+    enabled: yes
+
+- name: Restart Kibana
+  systemd:
+    name: kibana
+    state: restarted
