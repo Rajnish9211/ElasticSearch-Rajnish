@@ -17,24 +17,31 @@ module "security" {
 module "ubuntu_instance" {
   source           = "./modules/instances"
   ami_id           = "ami-0bbdd8c17ed981ef9" # Ubuntu 22.04
-  instance_type    = "t2.medium"
+  instance_type    = "t3.large"              # upgraded from t2.medium
   key_name         = var.key_name
   public_subnet_id = module.networking.public_subnet_ids[0]
   public_sg_id     = module.security.public_sg_id
   name             = "elasticsearch-server"
+  root_block_device = [{
+    volume_size = 50
+    volume_type = "gp3"
+  }]
 }
 
 # -------------------- Amazon Linux Instance --------------------
 module "amazonlinux_instance" {
   source           = "./modules/instances"
   ami_id           = "ami-00ca32bbc84273381" # Amazon Linux 2023
-  instance_type    = "t2.medium"
+  instance_type    = "t3.large"              # upgraded from t2.medium
   key_name         = var.key_name
   public_subnet_id = module.networking.public_subnet_ids[1]
   public_sg_id     = module.security.public_sg_id
   name             = "amazon"
+  root_block_device = [{
+    volume_size = 50
+    volume_type = "gp3"
+  }]
 }
- 
 
 # -------------------- Outputs --------------------
 output "ubuntu_public_ip" {
