@@ -22,10 +22,10 @@ module "ubuntu_instance" {
   public_subnet_id = module.networking.public_subnet_ids[0]
   public_sg_id     = module.security.public_sg_id
   name             = "elasticsearch-server"
-  root_block_device = [{
+  root_block_device = {
     volume_size = 50
     volume_type = "gp3"
-  }]
+  }
 }
 
 # -------------------- Amazon Linux Instance --------------------
@@ -37,10 +37,10 @@ module "amazonlinux_instance" {
   public_subnet_id = module.networking.public_subnet_ids[1]
   public_sg_id     = module.security.public_sg_id
   name             = "amazon"
-  root_block_device = [{
+  root_block_device = {
     volume_size = 50
     volume_type = "gp3"
-  }]
+  }
 }
 
 # -------------------- Outputs --------------------
