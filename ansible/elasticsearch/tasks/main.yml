@@ -154,3 +154,16 @@
         regexp: '^#?server.ssl.enabled:'
         line: 'server.ssl.enabled: false'
 
+# ------------------ ELASTIC PASSWORD RESET (Common) ------------------
+- name: Reset elastic user password (Debian/Ubuntu/Amazon Linux)
+  shell: |
+    /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic -b -s -p {{ elastic_password }}
+  args:
+    executable: /bin/bash
+  register: elastic_pass_reset
+  changed_when: "'Password for the [elastic] user successfully reset' in elastic_pass_reset.stdout"
+  when: ansible_os_family in ['Debian', 'RedHat'] or ansible_distribution == "Amazon"
+
+- name: Show password confirmation
+  debug:
+    msg: "Elastic password set successfully on {{ inventory_hostname }}"

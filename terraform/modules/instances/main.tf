@@ -18,3 +18,4 @@ output "public_instance_ip" {
 output "fetch_name" {
   value = aws_instance.public_instance.tags["fetch_name"]
 }
+
