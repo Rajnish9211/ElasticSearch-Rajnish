@@ -8,3 +8,7 @@ variable "name" {
   description = "Name tag for EC2 instance"
   type        = string
 }
+
+variable "root_block_device" {
+  type = map(any)
+}

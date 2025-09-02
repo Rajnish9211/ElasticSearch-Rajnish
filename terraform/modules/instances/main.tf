@@ -9,6 +9,11 @@ resource "aws_instance" "public_instance" {
     Name        = var.name
     fetch_name  = var.name
   }
+  
+ root_block_device {
+    volume_size = var.root_block_device["volume_size"]
+    volume_type = var.root_block_device["volume_type"]
+  }
 }
 
 output "public_instance_ip" {
