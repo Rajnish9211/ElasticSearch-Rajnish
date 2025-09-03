@@ -121,7 +121,18 @@
         line: 'http.port: 9200'
   when: ansible_distribution == "Amazon"
 
-# ------------------ KIBANA INSTALLATION (Common) ------------------
+# ------------------ INSTALLATION Kibana  ------------------
+- name: Install Kibana
+  package:
+    name: kibana
+    state: present
+  notify:
+    - Start Kibana
+    - Enable Kibana
+    - Restart Kibana
+
+
+# ------------------------------------
 - name: Configure kibana.yml
   block:
     - name: Set Kibana server.host
@@ -134,7 +145,7 @@
       lineinfile:
         path: /etc/kibana/kibana.yml
         regexp: '^#?elasticsearch.hosts:'
-        line: 'elasticsearch.hosts: ["https://{{ ansible_host }}:9200"]'
+        line: 'elasticsearch.hosts: ["http://{{ ansible_host }}:9200"]'
 
     - name: Set Elasticsearch service account token
       lineinfile:
@@ -154,16 +165,4 @@
         regexp: '^#?server.ssl.enabled:'
         line: 'server.ssl.enabled: false'
 
-# ------------------ ELASTIC PASSWORD RESET (Common) ------------------
-- name: Reset elastic user password (Debian/Ubuntu/RedHat/Amazon Linux)
-  shell: |
-    /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic -b -s -i {{ elastic_password }}
-  args:
-    executable: /bin/bash
-  register: elastic_pass_reset
-  changed_when: "'Password for the [elastic] user successfully reset' in elastic_pass_reset.stdout"
-  when: ansible_os_family in ['Debian', 'RedHat']
 
-- name: Show password confirmation
-  debug:
-    msg: "Elastic password set successfully on {{ inventory_hostname }}"
