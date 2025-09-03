@@ -157,7 +157,7 @@
 # ------------------ ELASTIC PASSWORD RESET (Common) ------------------
 - name: Reset elastic user password (Debian/Ubuntu/RedHat/Amazon Linux)
   shell: |
-    /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic -b -s -p {{ elastic_password }}
+    /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic -b -s -i {{ elastic_password }}
   args:
     executable: /bin/bash
   register: elastic_pass_reset
