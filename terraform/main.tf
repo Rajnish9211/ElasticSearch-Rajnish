@@ -26,7 +26,6 @@ module "ubuntu_instance" {
     volume_size = 50
     volume_type = "gp3"
   }
-  instance_state = "running"
 }
 
 # -------------------- Amazon Linux Instance --------------------
