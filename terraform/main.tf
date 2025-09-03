@@ -42,7 +42,17 @@ module "amazonlinux_instance" {
     volume_size = 50
     volume_type = "gp3"
   }
-  instance_state = "running"
+}
+
+#--------state running--------------------------
+resource "aws_ec2_instance_state" "ubuntu_state" {
+  instance_id = module.ubuntu_instance.instance_id
+  state       = "running"
+}
+
+resource "aws_ec2_instance_state" "amazonlinux_state" {
+  instance_id = module.amazonlinux_instance.instance_id
+  state       = "running"
 }
 
 # -------------------- Outputs --------------------
