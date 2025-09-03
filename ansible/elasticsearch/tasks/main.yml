@@ -131,38 +131,43 @@
     - Enable Kibana
     - Restart Kibana
 
-
-# ------------------------------------
-- name: Configure kibana.yml
+#------------------ CONFIGURE KIBANA  ------------------
+- name: Configure Kibana settings
   block:
     - name: Set Kibana server.host
       lineinfile:
         path: /etc/kibana/kibana.yml
-        regexp: '^#?server.host:'
+        regexp: '^\s*#?\s*server.host:'
         line: 'server.host: "0.0.0.0"'
+        backrefs: yes
 
     - name: Set Elasticsearch URL
       lineinfile:
         path: /etc/kibana/kibana.yml
-        regexp: '^#?elasticsearch.hosts:'
-        line: 'elasticsearch.hosts: ["http://{{ ansible_host }}:9200"]'
+        regexp: '^\s*#?\s*elasticsearch.hosts:'
+        line: 'elasticsearch.hosts: ["https://{{ ansible_host }}:9200"]'
+        backrefs: yes
 
     - name: Set Elasticsearch service account token
       lineinfile:
         path: /etc/kibana/kibana.yml
-        regexp: '^#?elasticsearch.serviceAccountToken:'
+        regexp: '^\s*#?\s*elasticsearch.serviceAccountToken:'
         line: 'elasticsearch.serviceAccountToken: "{{ kibana_service_token }}"'
+        backrefs: yes
 
     - name: Disable SSL verification for Elasticsearch
       lineinfile:
         path: /etc/kibana/kibana.yml
-        regexp: '^#?elasticsearch.ssl.verificationMode:'
+        regexp: '^\s*#?\s*elasticsearch.ssl.verificationMode:'
         line: 'elasticsearch.ssl.verificationMode: none'
+        backrefs: yes
 
     - name: Disable Kibana SSL
       lineinfile:
         path: /etc/kibana/kibana.yml
-        regexp: '^#?server.ssl.enabled:'
+        regexp: '^\s*#?\s*server.ssl.enabled:'
         line: 'server.ssl.enabled: false'
-
-
+        backrefs: yes
+  notify:
+    - Restart Kibana    
+    
